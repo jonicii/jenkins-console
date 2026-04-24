@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jenkins Console</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-secondary: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --success: #3fb950;
+      --warning: #d29922;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    
+    h1 { font-size: 24px; font-weight: 600; margin: 0 0 8px; }
+    h2 { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 12px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card h3 { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; }
+    
+    .stat { font-size: 28px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+    
+    .file-list { font-size: 13px; }
+    .file-list div { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .file-list div:last-child { border: none; }
+    .file-name { font-family: monospace; color: var(--accent); }
+    .file-date { color: var(--text-muted); font-size: 12px; }
+    
+    .skill-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-tag { 
+      background: var(--border); padding: 4px 10px; border-radius: 12px; 
+      font-size: 12px; color: var(--text-muted); 
+    }
+    
+    .prompt-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    .prompt-box h3 { font-size: 14px; margin: 0 0 12px; }
+    .prompt-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .prompt-input:focus { outline: none; border-color: var(--accent); }
+    .prompt-submit {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .prompt-result {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+    .prompt-result.success { display: block; background: rgba(63, 185, 80, 0.1); border: 1px solid var(--success); color: var(--success); }
+    .prompt-result.error { display: block; background: rgba(248, 81, 73, 0.1); border: 1px solid #f85149; color: #f85149; }
+    
+    .preference-list { margin-top: 16px; font-size: 13px; }
+    .preference-list div { padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+    
+    .header-row { display: flex; justify-content: space-between; align-items: center; }
+    .header-row h1 { margin: 0; }
+    .theme-toggle { background: var(--border); border: none; padding: 8px 12px; border-radius: 6px; color: var(--text); cursor: pointer; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-row">
+      <div>
+        <h1>Jenkins Console</h1>
+        <p class="subtitle">Visual view of my setup + ability to modify the UX</p>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+    
+    <h2>Session Stats</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Tokens Used</h3>
+        <div class="stat">92k</div>
+        <div class="stat-label">in this session</div>
+      </div>
+      <div class="card">
+        <h3>Model</h3>
+        <div class="stat" style="font-size: 18px;">openrouter/auto</div>
+        <div class="stat-label">Primary model</div>
+      </div>
+      <div class="card">
+        <h3>Context</h3>
+        <div class="stat">93k</div>
+        <div class="stat-label">of 2.0M (5%)</div>
+      </div>
+      <div class="card">
+        <h3>Messages</h3>
+        <div class="stat">~100</div>
+        <div class="stat-label">this session</div>
+      </div>
+    </div>
+    
+    <h2>Core Files</h2>
+    <div class="card">
+      <div class="file-list">
+        <div><span class="file-name">INTENT.md</span><span class="file-date">Updated 2 hours ago</span></div>
+        <div><span class="file-name">HEARTBEAT.md</span><span class="file-date">Updated 7 hours ago</span></div>
+        <div><span class="file-name">TOOLS.md</span><span class="file-date">Updated 4 hours ago</span></div>
+        <div><span class="file-name">MEMORY.md</span><span class="file-date">Updated 1 month ago</span></div>
+        <div><span class="file-name">SOUL.md</span><span class="file-date">Updated 2 months ago</span></div>
+        <div><span class="file-name">USER.md</span><span class="file-date">Updated 2 months ago</span></div>
+      </div>
+    </div>
+    
+    <h2>Skills</h2>
+    <div class="card">
+      <div class="skill-list">
+        <span class="skill-tag">github</span>
+        <span class="skill-tag">weather</span>
+        <span class="skill-tag">video-frames</span>
+        <span class="skill-tag">nano-pdf</span>
+        <span class="skill-tag">openai-image-gen</span>
+        <span class="skill-tag">healthcheck</span>
+        <span class="skill-tag">+ 45 more</span>
+      </div>
+    </div>
+    
+    <div class="prompt-box">
+      <h3>🧩 Prompt to Modify UX</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+        Try changing something: "Show only stats", "Dark mode", "More colors", "Hide skills"
+      </p>
+      <textarea class="prompt-input" id="promptInput" placeholder="Describe how you want the interface to change..."></textarea>
+      <button class="prompt-submit" onclick="submitPrompt()">Apply Change</button>
+      <div class="prompt-result" id="promptResult"></div>
+    </div>
+    
+    <h2>Your Preferences</h2>
+    <div class="card">
+      <div class="preference-list" id="preferenceList">
+        <div><span>Theme</span><span>Dark (default)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load preferences from localStorage
+    const prefs = JSON.parse(localStorage.getItem('jenkinsConsolePrefs') || '{"theme":"dark"}');
+    
+    // Apply saved preferences on load
+    function applyPrefs() {
+      if (prefs.theme === 'light') {
+        document.documentElement.style.setProperty('--bg', '#ffffff');
+        document.documentElement.style.setProperty('--bg-secondary', '#f6f8fa');
+        document.documentElement.style.setProperty('--border', '#d0d7de');
+        document.documentElement.style.setProperty('--text', '#24292f');
+        document.documentElement.style.setProperty('--text-muted', '#57606a');
+      }
+    }
+    applyPrefs();
+    
+    // Theme toggle
+    function toggleTheme() {
+      prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark';
+      savePrefs();
+      applyPrefs();
+      showResult('Theme changed to ' + prefs.theme, 'success');
+    }
+    
+    // Hide/show sections based on prompt
+    const promptPatterns = [
+      { pattern: /hide.*skills/i, action: () => document.querySelectorAll('h2').forEach(h => { if (h.textContent.includes('Skills')) h.nextElementSibling.style.display = 'none'; }) },
+      { pattern: /show.*stats|stats.*only/i, action: () => { 
+        document.querySelectorAll('.card, .prompt-box, h2').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('h2').forEach(h => { if (h.textContent.includes('Session')) { h.style.display = 'block'; h.nextElementSibling.style.display = 'grid'; }});
+      }},
+      { pattern: /more.*color|colorful/i, action: () => {
+        document.querySelectorAll('.card').forEach(c => c.style.borderColor = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#a371f7'][Math.floor(Math.random() * 5)]);
+      }},
+    ];
+    
+    function submitPrompt() {
+      const input = document.getElementById('promptInput').value.trim();
+      if (!input) return;
+      
+      let matched = false;
+      for (const p of promptPatterns) {
+        if (p.pattern.test(input)) {
+          p.action();
+          matched = true;
+        }
+      }
+      
+      if (matched) {
+        showResult('Applied: "' + input + '"', 'success');
+        // Save preference
+        prefs.lastPrompt = input;
+        savePrefs();
+      } else {
+        showResult('Could not understand "' + input + '". Try: "hide skills", "show stats only", or "more colors"', 'error');
+      }
+    }
+    
+    function showResult(msg, type) {
+      const el = document.getElementById('promptResult');
+      el.textContent = msg;
+      el.className = 'prompt-result ' + type;
+    }
+    
+    function savePrefs() {
+      localStorage.setItem('jenkinsConsolePrefs', JSON.stringify(prefs));
+    }
+  </script>
+</body>
+</html>
